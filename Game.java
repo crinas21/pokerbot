@@ -18,6 +18,7 @@ public class Game {
         "K", "13"
     );
 
+
     private static ArrayList<String> cardTuplesToString(ArrayList<ArrayList<String>> cardTuples) {
         // Converts a list of cards represented by a tuple of number and suit back into a list of cards each represented by a unified string
         ArrayList<String> cardStrings = new ArrayList<String>();
@@ -26,6 +27,7 @@ public class Game {
         }
         return cardStrings;
     }
+
 
     private static ArrayList<ArrayList<String>> getValidCards(Scanner sc, String stage,  ArrayList<ArrayList<String>> cardsOut) {
         ArrayList<String> cardsOutStrings = cardTuplesToString(cardsOut); // Used later to ensure that no duplicate cards are given even in between stages
@@ -57,7 +59,7 @@ public class Game {
                     num = faceToNum.get(num);
                 }
 
-                if (!numbers.contains(num) || !suits.contains(suit) || cardsOutStrings.contains(card)) {
+                if (!numbers.contains(num) || !suits.contains(suit) || cardsOutStrings.contains(num + suit)) {
                     System.out.println("Invalid Format\n");
                     invalid = true;
                     break;
@@ -70,6 +72,25 @@ public class Game {
 
         return splitCards;
     }
+
+
+    private static double pair(ArrayList<ArrayList<String>> cardsOut) {
+        // Sort by num of each card
+        Collections.sort(cardsOut, new Comparator<ArrayList<String>>() {    
+            @Override
+            public int compare(ArrayList<String> o1, ArrayList<String> o2) {
+                return o1.get(0).compareTo(o2.get(0));
+            }               
+        });
+        
+        String prevNum = cardsOut.get(0).get(0);
+        for (int i = 1; i < cardsOut.size(); i++) {
+            if (cardsOut.get(i).get(0).equals(prevNum)) {return 100;}
+            prevNum = cardsOut.get(i).get(0);
+        }
+        return 0;
+    }
+
 
     public static void main(String[] args) {
         boolean play = true;
@@ -86,6 +107,7 @@ public class Game {
             if (flop == null) {continue;}
             cardsOut.addAll(flop);
             System.out.println(cardsOut);
+            System.out.println(pair(cardsOut));
 
             // while (true) {
             //     System.out.println("Another Round? (Y/N)");
