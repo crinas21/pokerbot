@@ -36,8 +36,11 @@ def getValidCards(stage: str, cards_out: List[List]) -> List[List]:
         split_cards = []
 
         # Checking for invalid duplicates and invalid number of cards shown for the given stage
-        if len(set(cards_list)) < num_cards or num_cards != num_cards_for_stage[stage]:
-            print("Invalid Format\n")
+        if len(set(cards_list)) < num_cards:
+            print("You have given a duplicate card.\n")
+            continue
+        elif num_cards != num_cards_for_stage[stage]:
+            print(f"Incorrect number of cards given for {stage}. Please provide {num_cards_for_stage[stage]} cards.\n")
             continue
 
         for card in cards_list:
@@ -47,10 +50,15 @@ def getValidCards(stage: str, cards_out: List[List]) -> List[List]:
             if num in face_to_num:
                 num = face_to_num[num]
 
-            if num not in numbers or suit not in suits or [int(num), suit] in cards_out:
+            if num not in numbers or suit not in suits:
                 print("Invalid Format\n")
                 invalid = True
                 break
+            elif [int(num), suit] in cards_out:
+                print("You have given a duplicate card.\n")
+                invalid = True
+                break
+            
             split_card = [int(num), suit]
             split_cards.append(split_card)
             invalid = False
